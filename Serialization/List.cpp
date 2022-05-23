@@ -29,17 +29,19 @@ void ListRand::Deserialize(FILE* file)
 	char buf[256];
 	std::string data;
 	fseek(file, 0, SEEK_SET);
+	std::unordered_map<int, ListNode*> map;
 
 	int numLines = 0;
 	fscanf_s(file, "%d\n", &numLines);
 
-	for (int i = 0; i < numLines; ++i)
+	for (int i = 1; i <= numLines; ++i)
 	{
 		if (fgets(buf, sizeof(buf), file))
 		{
 			data = buf;
 			data.pop_back();
 			ListNode* newNode = PushBack(data, false);
+			map[i] = newNode;
 		}
 	}
 
@@ -47,7 +49,7 @@ void ListRand::Deserialize(FILE* file)
 	for (ListNode* node = Head; node; node = node->Next)
 	{
 		fscanf_s(file, "%d", &idx);
-		SetRand(node, idx);
+		node->Rand = map[idx];
 	}
 }
 
